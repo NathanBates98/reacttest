@@ -1,29 +1,64 @@
-import React, { useState, useEffect , useRef} from "react";
 import "./App.css";
-function Stopwatch(){
-  let seconds=0;
+import React, { useState, useRef, useEffect } from "react";
+
+const Stopwatch = () => {
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [isStarted, setIsStarted] = useState(false);
+
   const intervalRef = useRef(null);
 
-  function handleStart() {
-    clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => {
-      seconds=1;
-    }, 1000);
-  }
+  const handleStart = () => {
+    setIsStarted(true);
+  };
 
-  function handleStop() {
+  useEffect(() => {
     clearInterval(intervalRef.current);
+    if (isStarted) {
+      //increment by hours
+      if(minutes == 60){
+        setMinutes(0)
+        setHours(hours+1)
+      }
+      //increment by minutes
+      if(seconds == 60){
+        setSeconds(0)
+        setMinutes(minutes+1)
+      }
+      //increment by seconds
+      intervalRef.current = setInterval(() => {
+        setSeconds(seconds + 1);
+      }, 10);
+      
+      
+      
+    }
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [isStarted, seconds, minutes]);
+
+  const handleStop = () => {
+    setIsStarted(false);
+  };
+
+  const handleReset = () => {
+    setSeconds(0)
+    setMinutes(0)
+    setHours(0)
   }
 
   return (
-    <div className="App">
-      <div>{seconds}</div>
-      <button onClick = {handleStop}>Reset</button>
-      <button onClick = {handleStart}>Start</button>
-    </div>
+    <>
+      <h1>{hours}:{minutes}:{seconds}</h1>
+      <button onClick={handleStart}>Start</button>
+      <button onClick={handleStop}>Stop</button>
+      <button onClick={handleReset}>Reset</button>
+    </>
   );
-}
-
+};
 
 export default Stopwatch;
 
