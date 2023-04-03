@@ -1,36 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
-import {React, useState } from 'react'
+import React, { useState, useEffect , useRef} from "react";
+import "./App.css";
+function Stopwatch(){
+  let seconds=0;
+  const intervalRef = useRef(null);
 
-function App() {
-    const [counter, setCounter] = useState(0);
- 
-  //increase counter
-  const increase = () => {
-    setCounter(count => count + 1);
-  };
- 
-  //decrease counter
-  const decrease = () => {
-    setCounter(count => count - 1);
-  };
- 
-  //reset counter 
-  const reset = () =>{
-    setCounter(0)
+  function handleStart() {
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      seconds=1;
+    }, 1000);
   }
-  return (
 
-    <div className="counter">
-    <h1>React Counter</h1>
-    <span className="counter__output">{counter}</span>
-    <div className="btn__container">
-      <button className="control__btn" onClick = {increase}>+</button>
-      <button className="control__btn">-</button>
-      <button className="reset">Reset</button>
+  function handleStop() {
+    clearInterval(intervalRef.current);
+  }
+
+  return (
+    <div className="App">
+      <div>{seconds}</div>
+      <button onClick = {handleStop}>Reset</button>
+      <button onClick = {handleStart}>Start</button>
     </div>
-  </div>
   );
 }
 
-export default App;
+
+export default Stopwatch;
+
