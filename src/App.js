@@ -105,11 +105,11 @@ const Timer = () => {
   const [hours, setHours] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
   const intervalRef = useRef(null);
-
   let secondsArray = Array.from({length: 60}, (value,index) => index)
   let minutesArray = Array.from({length: 60}, (value,index) => index)
   let hoursArray = Array.from({length: 60}, (value,index) => index)
-
+  const [totalTime, setTotalTime] = useState(-1)
+  var tempTime
   
   
   //detects what key has been pressed
@@ -129,29 +129,36 @@ const Timer = () => {
 
   //starts timer
   const handleStart = () => {
-    setSeconds()
+    tempTime = parseInt(seconds)+(parseInt(minutes)*60)+(parseInt(hours*360))
+    setTotalTime(tempTime)
+    console.log(totalTime)
     setIsStarted(true);
   };
-
   
 
   useEffect(() => {
     document.addEventListener('keydown', detectKeyDown, true)
     clearInterval(intervalRef.current);
     if (isStarted) {
+      //checking timer is finished
+      if(totalTime===0){
+        alert("timer done")
+        handleStop()
+      }
       //increment by hours
-      if(minutes === 60){
-        setMinutes(0)
+      if(minutes === 0 && hours !==0){
+        setMinutes(60)
         setHours(hours-1)
       }
       //increment by minutes
-      if(seconds === 60){
-        setSeconds(0)
+      if(seconds === 0){
+        setSeconds(60)
         setMinutes(minutes-1)
       }
       //increment by seconds
       intervalRef.current = setInterval(() => {
         setSeconds(seconds - 1);
+        setTotalTime(totalTime-1);
       }, 1000);
     }
 
@@ -176,9 +183,13 @@ const Timer = () => {
   
   return (
     <>
-      <h1>{hours}:{minutes}:{seconds}</h1>
+      <h1>{hours.toString().padStart(2,'0')}:{minutes.toString().padStart(2,'0')}:{seconds.toString().padStart(2,'0')}</h1>
       <div>
-      <select>
+      <select
+        
+        onChange={(e=> setHours(e.target.value))} 
+        id = "hours"
+      >
           <option > -- Hours -- </option>
           {hoursArray.map(hoursArray => (
             <option key = {hoursArray} value={hoursArray}>
@@ -186,7 +197,11 @@ const Timer = () => {
             </option>
             ))}
         </select>
-        <select>
+        <select
+          
+          onChange={(e=> setMinutes(e.target.value))} 
+          id = "minutes"
+        >
           <option > -- Minutes -- </option>
           {minutesArray.map(minutesArray => (
             <option key = {minutesArray} value={minutesArray}>
@@ -194,7 +209,11 @@ const Timer = () => {
             </option>
             ))}
         </select>
-        <select>
+        <select
+          
+          onChange={(e=> setSeconds(e.target.value))} 
+          id = "seconds"
+        >
           <option > -- Seconds -- </option>
           {secondsArray.map(secondsArray => (
             <option key = {secondsArray} value={secondsArray}>
