@@ -38,7 +38,7 @@ const Stopwatch = () => {
   
 
   useEffect(() => {
-    document.addEventListener('keydown', detectKeyDown, true)
+    document.addEventListener('keydown', detectKeyDown, true)//set this up in seperate useeffect empty means it triggers once on first rest
     clearInterval(intervalRef.current);
     if (isStarted) {
       //increment by hours
@@ -83,11 +83,14 @@ const Stopwatch = () => {
 
   return (
     <>
-      <h1>{hours}:{minutes}:{seconds}</h1>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
-      <button onClick={handleReset}>Reset</button>
-      <button onClick={handleLap}>Lap</button>
+      <h1 class="center">{hours}:{minutes}:{seconds}</h1>
+      <div class="center">
+      <button class = "button" onClick={handleStart}>Start</button>
+      <button class = "button" onClick={handleStop}>Stop</button>
+      <button class = "button" onClick={handleReset}>Reset</button>
+      <button class = "button" onClick={handleLap}>Lap</button>
+      </div>
+      <div class = "center">
       <p>Laps:</p>
       <ul>
         {lapList.map((lap) => (
@@ -95,6 +98,7 @@ const Stopwatch = () => {
         )
         )}
       </ul>
+      </div>
     </>
   );
 };
@@ -183,10 +187,12 @@ const Timer = () => {
   
   return (
     <>
-      <h1>{hours.toString().padStart(2,'0')}:{minutes.toString().padStart(2,'0')}:{seconds.toString().padStart(2,'0')}</h1>
-      <div>
+      <h1 class="center">{hours.toString().padStart(2,'0')}:{minutes.toString().padStart(2,'0')}:{seconds.toString().padStart(2,'0')}</h1>
+      <div
+        class="center"
+      >
       <select
-        
+        class="dropDown"
         onChange={(e=> setHours(e.target.value))} 
         id = "hours"
       >
@@ -198,7 +204,7 @@ const Timer = () => {
             ))}
         </select>
         <select
-          
+          class="dropDown"
           onChange={(e=> setMinutes(e.target.value))} 
           id = "minutes"
         >
@@ -210,7 +216,7 @@ const Timer = () => {
             ))}
         </select>
         <select
-          
+          class="dropDown"
           onChange={(e=> setSeconds(e.target.value))} 
           id = "seconds"
         >
@@ -222,12 +228,16 @@ const Timer = () => {
             ))}
         </select>
       </div>
-      <button onClick={handleStart}>Start</button>
-      <button onClick={handleStop}>Stop</button>
-      <button onClick={handleReset}>Reset</button>
+      <div
+        class="center"
+      >
+      <button onClick={handleStart} class="button">Start</button>
+      <button onClick={handleStop} class="button">Stop</button>
+      <button onClick={handleReset} class="button">Reset</button>
+      </div>
     </>
   );
 };
 
-export default Timer;
+export default Stopwatch;
 
