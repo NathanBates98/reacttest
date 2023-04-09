@@ -35,10 +35,8 @@ const Stopwatch = () => {
     setIsStarted(true);
   };
 
-  
-
   useEffect(() => {
-    document.addEventListener('keydown', detectKeyDown, true)//set this up in seperate useeffect empty means it triggers once on first rest
+    //set this up in seperate useeffect empty means it triggers once on first rest
     clearInterval(intervalRef.current);
     if (isStarted) {
       //increment by hours
@@ -56,11 +54,20 @@ const Stopwatch = () => {
         setSeconds(seconds + 1);
       }, 1000);
     }
-
     return () => {
       clearInterval(intervalRef.current);
     };
   }, [isStarted, seconds, minutes,hours]);
+
+  //useeffect to add keydown listener only once
+  useEffect(() => {
+    document.addEventListener('keydown', detectKeyDown)
+    
+    return () => {
+      document.removeEventListener('keydown', detectKeyDown);
+    }
+    
+  }, [detectKeyDown])
 
   //pauses the timer
   const handleStop = () => {
@@ -77,8 +84,8 @@ const Stopwatch = () => {
 
   //adds to lap list
   const handleLap = () => {
+    console.log(lapList)
     setlapList(lapList => [...lapList, hours + ":" + minutes+ ":" + seconds])
-    
   }
 
   return (
@@ -139,9 +146,9 @@ const Timer = () => {
     setIsStarted(true);
   };
   
-
+  //useeffect for the timer
   useEffect(() => {
-    document.addEventListener('keydown', detectKeyDown, true)
+    
     clearInterval(intervalRef.current);
     if (isStarted) {
       //checking timer is finished
@@ -171,6 +178,10 @@ const Timer = () => {
     };
   }, [isStarted, seconds, minutes,hours]);
 
+  //use effect in for detecting key is pressed down
+  useEffect(() => {
+    document.addEventListener('keydown', detectKeyDown, true)
+  })
   //pauses the timer
   const handleStop = () => {
     setIsStarted(false);
