@@ -36,7 +36,6 @@ const Stopwatch = () => {
   };
 
   useEffect(() => {
-    //set this up in seperate useeffect empty means it triggers once on first rest
     clearInterval(intervalRef.current);
     if (isStarted) {
       //increment by hours
